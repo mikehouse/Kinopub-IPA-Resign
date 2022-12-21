@@ -1,7 +1,12 @@
 
 lane :resign_ipa_tvos do |options|
-    provision = verify_provision(provision: options[:provision])
     ipa_path = "#{Pathname.getwd.parent}/tvos/cncrt_tvOS-24-1.12.ipa"
+    resign_ipa_os(provision: options[:provision], ipa_path: ipa_path, identity: options[:identity])
+end
+
+private_lane :resign_ipa_os do |options|
+    provision = verify_provision(provision: options[:provision])
+    ipa_path = verify_ipa_path(ipa_path: options[:ipa_path])
     puts ""
     puts "Usinn IPA #{ipa_path}"
     puts "Moblie Provisioning #{provision}"
@@ -13,8 +18,8 @@ lane :resign_ipa_tvos do |options|
 end
 
 private_lane :update_ipa do |options|
-    provision = verify_provision(provision: options[:provision])
-    ipa_path = verify_ipa_path(ipa_path: options[:ipa_path])
+    provision = options[:provision]
+    ipa_path = options[:ipa_path]
 
     ipa_path_update_dir = result_dir()
     ipa_path_update = "#{ipa_path_update_dir}/#{ipa_path.split('/').last }"
