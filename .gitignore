@@ -1,0 +1,9 @@
+.bundle
+Gemfile.lock
+vendor
+fastlane/__MACOSX
+fastlane/resign
+fastlane/report.xml
+fastlane/provision.plist
+fastlane/Payload
+.DS_Store

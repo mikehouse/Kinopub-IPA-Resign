@@ -1,0 +1,120 @@
+
+lane :resign_ipa_tvos do |options|
+    provision = verify_provision(provision: options[:provision])
+    ipa_path = "#{Pathname.getwd.parent}/tvos/cncrt_tvOS-24-1.12.ipa"
+    puts ""
+    puts "Usinn IPA #{ipa_path}"
+    puts "Moblie Provisioning #{provision}"
+    puts ""
+    ipa_update = update_ipa(provision: provision, ipa_path: ipa_path)
+    puts ""
+    puts "Modify IPA before resign #{ipa_update}"
+    resign_ipa(provision: provision, ipa_path: ipa_update, identity: options[:identity])
+end
+
+private_lane :update_ipa do |options|
+    provision = verify_provision(provision: options[:provision])
+    ipa_path = verify_ipa_path(ipa_path: options[:ipa_path])
+
+    ipa_path_update_dir = result_dir()
+    ipa_path_update = "#{ipa_path_update_dir}/#{ipa_path.split('/').last }"
+
+    unpack_name = "Payload"
+    sh "yes | unzip -q #{ipa_path}"
+    provision_content_path = "./provision.plist"
+    sh "security cms -D -i #{provision} > #{provision_content_path}"
+    raw_bundle_id = sh "/usr/libexec/PlistBuddy -c \"PRINT :Entitlements:application-identifier\" #{provision_content_path}"
+    bundle_id = raw_bundle_id.split(".").drop(1).join(".")
+    sh "rm #{provision_content_path}"
+    
+    app_name = Dir.children("./#{unpack_name}").select{|file| file.end_with?(".app")  }[0]
+    plist_path = "./#{unpack_name}/#{app_name}/Info.plist"
+    
+    original_bundle_id = sh "/usr/libexec/PlistBuddy -c \"PRINT :CFBundleIdentifier\" #{plist_path}"
+    puts "Original IPA BundleID: #{original_bundle_id}"
+    puts "Replace to IPA BundleID: #{bundle_id}"
+
+    # update bundle id
+    sh "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{bundle_id}\" #{plist_path}"
+
+    # remove plugins data
+    sh "/usr/libexec/PlistBuddy -c \"Delete :TVTopShelfImage\" #{plist_path}"
+
+    # remove plugins as not needed for base functioning.
+    sh "rm -fr ./#{unpack_name}/#{app_name}/PlugIns"
+
+    if Dir.exist?(ipa_path_update)
+        File.delete(ipa_path_update)
+    end
+
+    sh "zip -rq #{ipa_path_update} ./#{unpack_name}"
+    sh "rm -fr ./#{unpack_name}"
+    ipa_path_update
+end
+
+private_lane :resign_ipa do |options|
+    ipa_path = options[:ipa_path]
+    provision = options[:provision]
+    identity = options[:identity]
+
+    if identity == nil 
+        identity = find_identity(provision: provision)
+    end
+
+    puts "using resign identity: #{identity}"
+
+    resign(
+        ipa: ipa_path,
+        signing_identity: identity,
+        provisioning_profile: provision
+    )
+end
+
+private_lane :find_identity do |options|
+    provision = options[:provision]
+    # Extract all the system certificates for identity search.
+    identities_list = (sh "security find-certificate -p -Z -a").split("-----END CERTIFICATE-----\n")
+    identities = {}
+    identities_list.each do |item|
+        lines = item.split("\n")
+        # key -> identity SHA-1, value -> certificate in PEM format
+        identities.store(lines[1].split(" ").last, lines.drop(3).join())
+    end
+
+    # Decode mobileprovision.
+    xml = sh "security cms -D -i #{provision}"
+    parsed_info = Nokogiri::XML(xml)
+
+    identity = ""
+    # Find a match for mobileprovision and keychain certificates.
+    parsed_info.search('data').map(&:text).each do |pem|
+        identities.each do |key, value|
+            if value == pem
+                identity = key
+            end
+        end
+    end
+    identity
+end
+
+private_lane :result_dir do
+    dir = "#{Dir.pwd}/resign"
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+    dir
+end
+
+private_lane :verify_provision do |options|
+    provision = options[:provision]
+    if provision == nil || (File.exists?(provision) == false)
+        UI.user_error!("`provision` key with a path to *.mobileprovision file must be provided.")
+    end
+    provision
+end    
+
+private_lane :verify_ipa_path do |options|
+    ipa_path = options[:ipa_path]
+    if ipa_path == nil || File.exists?(ipa_path) == false
+        return UI.user_error!("ipa file path must be provided.")
+    end
+    ipa_path
+end
