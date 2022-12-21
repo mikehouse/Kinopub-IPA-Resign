@@ -51,6 +51,10 @@ bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded
 bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded.mobileprovision identity:5EBCD74500DBE201A18629CDCE743303F47D0941
 ```
 
+#### Result
+
+If success can be found at ./fastlane/resign/cncrt_tvOS-24-1.12.ipa
+
 #### What it will do
 
 1. It takes original Kinopub tvos ipa file (./tvos/cncrt_tvOS-24-1.12.ipa)
@@ -65,6 +69,10 @@ bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded
 1. Find paired to MacOS your Apple TV in `Apple Configurator` app (https://apps.apple.com/us/app/apple-configurator/id1037126344?mt=12)
 2. Drag and Drop there resigned IPA file
 3. Done
+
+### Problem to Find/Pair Apple TV to MacOS ?
+
+Here is my gist with full description how to pair Apple TV using Xcode https://gist.github.com/mikehouse/01ffe9ce1a5793406150f7b2fd15abbc
 
 ### Why ?
 
