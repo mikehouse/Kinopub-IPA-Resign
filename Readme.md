@@ -109,6 +109,10 @@ I didn't want to use appdb.io service to make the same thing.
 
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
+```bash
+shasum -a 256 ./ios/cncrt.ipa # 846a5d88b86ad52d1075f59f0c0b436b635cee306ce0fcb9377a11f024e52f3f  ios/cncrt.ipa
+```
+
 You need Entitlement like this one:
 
 1. Keychanin Sharing
@@ -128,22 +132,22 @@ You need Entitlement like this one:
 
 ```xml
 <plist version="1.0">
-	<dict>
-		<key>aps-environment</key>
-		<string>development</string>
-		<key>com.apple.security.application-groups</key>
-		<array></array>
-		<key>com.apple.developer.networking.wifi-info</key>
-		<true/>
-		<key>keychain-access-groups</key>
-		<array>
-			<string>8FA39DD6YF.ifsoft.mys</string>
-		</array>
-		<key>com.apple.developer.associated-domains</key>
-		<array>
-			<string>applinks:kino.pub</string>
-		</array>
-	</dict>
+    <dict>
+        <key>aps-environment</key>
+        <string>development</string>
+        <key>com.apple.security.application-groups</key>
+        <array></array>
+        <key>com.apple.developer.networking.wifi-info</key>
+        <true/>
+        <key>keychain-access-groups</key>
+        <array>
+            <string>8FA39DD6YF.ifsoft.mys</string>
+        </array>
+        <key>com.apple.developer.associated-domains</key>
+        <array>
+            <string>applinks:kino.pub</string>
+        </array>
+    </dict>
 </plist>
 ```
 
