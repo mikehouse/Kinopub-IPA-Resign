@@ -77,3 +77,28 @@ Here is my gist with full description how to pair Apple TV using Xcode https://g
 ### Why ?
 
 I didn't want to use appdb.io service to make the same thing.
+
+### How to create .mobileprovision using Xcode
+
+1. Open Xcode
+2. LogIn in Xcode using your Apple ID (Preferences -> Accounts)
+3. Create new project
+
+- File -> New -> Project
+- Select there tvos tab
+- Select App
+- Type your app bundle id
+- Select your developer team
+
+<img src="tvos-create-app.png" width="60%">
+
+4. After project created navigate to Signing & Capabilities section
+5. Make sure that correct Developer Team set
+6. Background Modes for audio and fetch are enabled (use "+ Capabilities" menu to add these)
+7. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
+
+<img src="tvos-configure-app.png" width="60%">
+
+8. Build project (Product -> Build)
+9. Go to the build project directory (Product -> Show Build Folder in Finder)
+10. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file

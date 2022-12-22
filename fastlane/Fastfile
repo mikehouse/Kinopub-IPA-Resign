@@ -1,26 +1,24 @@
 
 lane :resign_ipa_tvos do |options|
     ipa_path = "#{Pathname.getwd.parent}/tvos/cncrt_tvOS-24-1.12.ipa"
-    resign_ipa_os(provision: options[:provision], ipa_path: ipa_path, identity: options[:identity])
+    resign_ipa_os(options[:provision], ipa_path, options[:identity]) { |plist|
+        # remove tvos specific data
+        sh "/usr/libexec/PlistBuddy -c \"Delete :TVTopShelfImage\" #{plist}"
+    }
 end
 
-private_lane :resign_ipa_os do |options|
-    provision = verify_provision(provision: options[:provision])
-    ipa_path = verify_ipa_path(ipa_path: options[:ipa_path])
+def resign_ipa_os(provision, ipa_path, identity, &block)
     puts ""
-    puts "Usinn IPA #{ipa_path}"
-    puts "Moblie Provisioning #{provision}"
+    puts "Using IPA #{ipa_path}"
+    puts "Mobile Provisioning #{provision}"
     puts ""
-    ipa_update = update_ipa(provision: provision, ipa_path: ipa_path)
+    ipa_update = update_ipa(provision, ipa_path, &block)
     puts ""
     puts "Modify IPA before resign #{ipa_update}"
-    resign_ipa(provision: provision, ipa_path: ipa_update, identity: options[:identity])
+    resign_ipa(provision, ipa_update, identity)
 end
 
-private_lane :update_ipa do |options|
-    provision = options[:provision]
-    ipa_path = options[:ipa_path]
-
+def update_ipa(provision, ipa_path, &block)
     ipa_path_update_dir = result_dir()
     ipa_path_update = "#{ipa_path_update_dir}/#{ipa_path.split('/').last }"
 
@@ -42,8 +40,8 @@ private_lane :update_ipa do |options|
     # update bundle id
     sh "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{bundle_id}\" #{plist_path}"
 
-    # remove plugins data
-    sh "/usr/libexec/PlistBuddy -c \"Delete :TVTopShelfImage\" #{plist_path}"
+    # hand to the caller to hanlde plist if needed
+    block.call(plist_path)
 
     # remove plugins as not needed for base functioning.
     sh "rm -fr ./#{unpack_name}/#{app_name}/PlugIns"
@@ -57,13 +55,9 @@ private_lane :update_ipa do |options|
     ipa_path_update
 end
 
-private_lane :resign_ipa do |options|
-    ipa_path = options[:ipa_path]
-    provision = options[:provision]
-    identity = options[:identity]
-
+def resign_ipa(provision, ipa_path, identity)
     if identity == nil 
-        identity = find_identity(provision: provision)
+        identity = find_identity(provision)
     end
 
     puts "using resign identity: #{identity}"
@@ -75,8 +69,7 @@ private_lane :resign_ipa do |options|
     )
 end
 
-private_lane :find_identity do |options|
-    provision = options[:provision]
+def find_identity(provision)
     # Extract all the system certificates for identity search.
     identities_list = (sh "security find-certificate -p -Z -a").split("-----END CERTIFICATE-----\n")
     identities = {}
@@ -102,24 +95,27 @@ private_lane :find_identity do |options|
     identity
 end
 
-private_lane :result_dir do
+def result_dir
     dir = "#{Dir.pwd}/resign"
     Dir.mkdir(dir) unless Dir.exist?(dir)
     dir
 end
 
-private_lane :verify_provision do |options|
-    provision = options[:provision]
-    if provision == nil || (File.exists?(provision) == false)
-        UI.user_error!("`provision` key with a path to *.mobileprovision file must be provided.")
-    end
-    provision
+def verify_provision(provision)
+    verify_path(provision, "`provision` key with a full path to *.mobileprovision file must be provided.") { |path| 
+        path.end_with?(".mobileprovision") 
+    }
 end    
 
-private_lane :verify_ipa_path do |options|
-    ipa_path = options[:ipa_path]
-    if ipa_path == nil || File.exists?(ipa_path) == false
-        return UI.user_error!("ipa file path must be provided.")
+def verify_ipa_path(ipa_path)
+    verify_path(ipa_path, "ipa full file path must be provided.") { |path| 
+        path.end_with?(".ipa") 
+    }
+end
+
+def verify_path(path, error)
+    if path == nil || File.exists?(path) == false || path.start_with?("/") == false || yield(path) == false
+        UI.user_error!(error)
     end
-    ipa_path
+    path
 end
