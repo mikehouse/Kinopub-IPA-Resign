@@ -7,6 +7,11 @@ lane :resign_ipa_tvos do |options|
     }
 end
 
+lane :resign_ipa_ios do |options|
+    ipa_path = "#{Pathname.getwd.parent}/ios/cncrt.ipa"
+    resign_ipa_os(options[:provision], ipa_path, options[:identity]) { |plist| }
+end
+
 def resign_ipa_os(provision, ipa_path, identity, &block)
     puts "Using IPA #{ipa_path}"
     puts "Mobile Provisioning #{provision}"

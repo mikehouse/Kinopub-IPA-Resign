@@ -10,7 +10,7 @@
 
 #### TVOS
 
-<img src="./tvos/App Icon - Small400x240@2x~tv.png" width="80%">
+<img src="./tvos/App Icon - Small400x240@2x~tv.png" width="60%">
 
 Your `mobileprovision` seems should contain abilities for background modes as its done in original Kinopub app:
 
@@ -104,3 +104,49 @@ I didn't want to use appdb.io service to make the same thing.
 8. Build project (Product -> Build)
 9. Go to the build project directory (Product -> Show Build Folder in Finder)
 10. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
+
+### Kinopub iOS App
+
+<img src="./ios/AppIcon90x90@2x~iphone.png">
+
+You need Entitlement like this one:
+
+1. Keychanin Sharing
+2. App Groups
+3. Accosiated Domains
+4. Access WiFi Information
+5. Background Modes
+
+```xml
+<key>UIBackgroundModes</key>
+<array>
+    <string>audio</string>
+    <string>fetch</string>
+    <string>remote-notification</string>
+</array>
+```
+
+```xml
+<plist version="1.0">
+	<dict>
+		<key>aps-environment</key>
+		<string>development</string>
+		<key>com.apple.security.application-groups</key>
+		<array></array>
+		<key>com.apple.developer.networking.wifi-info</key>
+		<true/>
+		<key>keychain-access-groups</key>
+		<array>
+			<string>8FA39DD6YF.ifsoft.mys</string>
+		</array>
+		<key>com.apple.developer.associated-domains</key>
+		<array>
+			<string>applinks:kino.pub</string>
+		</array>
+	</dict>
+</plist>
+```
+
+```bash
+bundle exec fastlane resign_ipa_ios provision:/Users/my_user/Downloads/embedded.mobileprovision
+```
