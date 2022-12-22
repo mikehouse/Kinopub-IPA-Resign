@@ -8,12 +8,9 @@ lane :resign_ipa_tvos do |options|
 end
 
 def resign_ipa_os(provision, ipa_path, identity, &block)
-    puts ""
     puts "Using IPA #{ipa_path}"
     puts "Mobile Provisioning #{provision}"
-    puts ""
     ipa_update = update_ipa(provision, ipa_path, &block)
-    puts ""
     puts "Modify IPA before resign #{ipa_update}"
     resign_ipa(provision, ipa_update, identity)
 end

@@ -10,6 +10,8 @@
 
 #### TVOS
 
+<img src="./tvos/App Icon - Small400x240@2x~tv.png" width="80%">
+
 Your `mobileprovision` seems should contain abilities for background modes as its done in original Kinopub app:
 
 ```xml
@@ -64,7 +66,7 @@ If success can be found at ./fastlane/resign/cncrt_tvOS-24-1.12.ipa
 5. Repacks it back to .ipa
 6. Uses `fastlane resign` tool (https://docs.fastlane.tools/actions/resign/) to resign IPA file by provided `mobileprovision`
 
-### Install IPA
+### Install IPA TVOS
 
 1. Find paired to MacOS your Apple TV in `Apple Configurator` app (https://apps.apple.com/us/app/apple-configurator/id1037126344?mt=12)
 2. Drag and Drop there resigned IPA file
@@ -90,14 +92,14 @@ I didn't want to use appdb.io service to make the same thing.
 - Type your app bundle id
 - Select your developer team
 
-<img src="tvos-create-app.png" width="60%">
+<img src="tvos-create-app.png" width="80%">
 
 4. After project created navigate to Signing & Capabilities section
 5. Make sure that correct Developer Team set
 6. Background Modes for audio and fetch are enabled (use "+ Capabilities" menu to add these)
 7. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
 
-<img src="tvos-configure-app.png" width="60%">
+<img src="tvos-configure-app.png" width="80%">
 
 8. Build project (Product -> Build)
 9. Go to the build project directory (Product -> Show Build Folder in Finder)
