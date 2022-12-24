@@ -29,13 +29,14 @@ def update_ipa(provision, ipa_path, &block)
     provision_content_path = "./provision.plist"
     sh "security cms -D -i #{provision} > #{provision_content_path}"
     raw_bundle_id = sh "/usr/libexec/PlistBuddy -c \"PRINT :Entitlements:application-identifier\" #{provision_content_path}"
-    bundle_id = raw_bundle_id.split(".").drop(1).join(".")
+    bundle_id = raw_bundle_id.split(".").drop(1).join(".").gsub("\n", '')
     sh "rm #{provision_content_path}"
     
     app_name = Dir.children("./#{unpack_name}").select{|file| file.end_with?(".app")  }[0]
     plist_path = "./#{unpack_name}/#{app_name}/Info.plist"
     
-    original_bundle_id = sh "/usr/libexec/PlistBuddy -c \"PRINT :CFBundleIdentifier\" #{plist_path}"
+    original_bundle_id_raw = sh "/usr/libexec/PlistBuddy -c \"PRINT :CFBundleIdentifier\" #{plist_path}"
+    original_bundle_id = original_bundle_id_raw.gsub("\n", '')
     puts "Original IPA BundleID: #{original_bundle_id}"
     puts "Replace to IPA BundleID: #{bundle_id}"
 

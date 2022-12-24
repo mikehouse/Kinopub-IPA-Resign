@@ -8,19 +8,9 @@
 - bundler
 - Apple ceriticate installed in `Keychain Access` app
 
-#### TVOS
+## Kinopub TVOS
 
 <img src="./tvos/App Icon - Small400x240@2x~tv.png" width="60%">
-
-Your `mobileprovision` seems should contain abilities for background modes as its done in original Kinopub app:
-
-```xml
-<key>UIBackgroundModes</key>
-<array>
-    <string>audio</string>
-    <string>fetch</string>
-</array>
-```
 
 ### About
 
@@ -105,7 +95,7 @@ I didn't want to use appdb.io service to make the same thing.
 9. Go to the build project directory (Product -> Show Build Folder in Finder)
 10. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
 
-### Kinopub iOS App
+## Kinopub iOS App
 
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
@@ -124,8 +114,6 @@ You need Entitlement like this one:
 ```xml
 <key>UIBackgroundModes</key>
 <array>
-    <string>audio</string>
-    <string>fetch</string>
     <string>remote-notification</string>
 </array>
 ```
