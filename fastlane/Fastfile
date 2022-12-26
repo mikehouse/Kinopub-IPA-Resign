@@ -13,6 +13,8 @@ lane :resign_ipa_ios do |options|
 end
 
 def resign_ipa_os(provision, ipa_path, identity, &block)
+    provision = verify_provision(provision)
+    ipa_path = verify_ipa_path(ipa_path)
     puts "Using IPA #{ipa_path}"
     puts "Mobile Provisioning #{provision}"
     ipa_update = update_ipa(provision, ipa_path, &block)
