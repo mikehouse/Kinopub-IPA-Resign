@@ -79,21 +79,19 @@ I didn't want to use appdb.io service to make the same thing.
 - File -> New -> Project
 - Select there tvos tab
 - Select App
-- Type your app bundle id
-- Select your developer team
 
 <img src="tvos-create-app.png" width="80%">
 
-4. After project created navigate to Signing & Capabilities section
-5. Make sure that correct Developer Team set
-6. Background Modes for audio and fetch are enabled (use "+ Capabilities" menu to add these)
-7. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
+- Type your app bundle id
+- Select your developer team
+
+6. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
 
 <img src="tvos-configure-app.png" width="80%">
 
-8. Build project (Product -> Build)
-9. Go to the build project directory (Product -> Show Build Folder in Finder)
-10. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
+7. Build project (Product -> Build)
+8. Go to the build project directory (Product -> Show Build Folder in Finder)
+9. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
 
 ## Kinopub iOS App
 
