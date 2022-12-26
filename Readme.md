@@ -85,13 +85,13 @@ I didn't want to use appdb.io service to make the same thing.
 - Type your app bundle id
 - Select your developer team
 
-6. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
+4. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
 
 <img src="tvos-configure-app.png" width="80%">
 
-7. Build project (Product -> Build)
-8. Go to the build project directory (Product -> Show Build Folder in Finder)
-9. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
+5. Build project (Product -> Build)
+6. Go to the build project directory (Product -> Show Build Folder in Finder)
+7. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
 
 ## Kinopub iOS App
 
