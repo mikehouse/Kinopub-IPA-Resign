@@ -101,41 +101,31 @@ I didn't want to use appdb.io service to make the same thing.
 shasum -a 256 ./ios/cncrt.ipa # 846a5d88b86ad52d1075f59f0c0b436b635cee306ce0fcb9377a11f024e52f3f  ios/cncrt.ipa
 ```
 
-You need Entitlement like this one:
+There are two types of accounts for signing:
 
-1. Keychanin Sharing
-2. App Groups
-3. Accosiated Domains
-4. Access WiFi Information
-5. Background Modes
+1. Developer account (paid 100$ per year, a sign is valid for a year)
+2. Free account (a sign is valid for 7 days)
 
-```xml
-<key>UIBackgroundModes</key>
-<array>
-    <string>remote-notification</string>
-</array>
+Also there are two types of app delivering to a device:
+
+1. *.ipa (zip archive for *.app) file (using App Configuration/Firebase/TestFlight)
+2. install *.app directly to a device from Terminal
+
+For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there is only one way to install an app, the flow is following:
+
+1. Re-sign original ipa (ios/cncrt.ipa) using the project's script
+2. Unpack re-signed ipa to get an app bundle
+3. Install an app bundle directly to a device using set of libs from `libimobiledevice`
+
+```bash
+# find connected iPhone 
+idevice_id # 00008000-001A048C3A712345
+
+# install an app to a device
+ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/cncrt.app
 ```
 
-```xml
-<plist version="1.0">
-    <dict>
-        <key>aps-environment</key>
-        <string>development</string>
-        <key>com.apple.security.application-groups</key>
-        <array></array>
-        <key>com.apple.developer.networking.wifi-info</key>
-        <true/>
-        <key>keychain-access-groups</key>
-        <array>
-            <string>8FA39DD6YF.ifsoft.mys</string>
-        </array>
-        <key>com.apple.developer.associated-domains</key>
-        <array>
-            <string>applinks:kino.pub</string>
-        </array>
-    </dict>
-</plist>
-```
+For a paid developer account just install the app using script created ipa file, delivering ipa to a device using App Configurator or AirDrop.
 
 ```bash
 bundle exec fastlane resign_ipa_ios provision:/Users/my_user/Downloads/embedded.mobileprovision
