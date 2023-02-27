@@ -101,6 +101,12 @@ I didn't want to use appdb.io service to make the same thing.
 shasum -a 256 ./ios/cncrt.ipa # 846a5d88b86ad52d1075f59f0c0b436b635cee306ce0fcb9377a11f024e52f3f  ios/cncrt.ipa
 ```
 
+### Resign the ios App
+
+```bash
+bundle exec fastlane resign_ipa_ios provision:/Users/my_user/Downloads/embedded.mobileprovision
+```
+
 There are two types of accounts for signing:
 
 1. Developer account (paid 100$ per year, a sign is valid for a year)
@@ -126,7 +132,3 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 ```
 
 For a paid developer account just install the app using script created ipa file, delivering ipa to a device using App Configurator or AirDrop.
-
-```bash
-bundle exec fastlane resign_ipa_ios provision:/Users/my_user/Downloads/embedded.mobileprovision
-```
