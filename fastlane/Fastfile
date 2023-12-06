@@ -1,6 +1,6 @@
 
 lane :resign_ipa_tvos do |options|
-    ipa_path = "#{Pathname.getwd.parent}/tvos/cncrt_tvOS-24-1.12.ipa"
+    ipa_path = "#{Pathname.getwd.parent}/tvos/micro_tvOS-25_11.2023.ipa"
     resign_ipa_os(options[:provision], ipa_path, options[:identity]) { |plist|
         # remove tvos specific data
         sh "/usr/libexec/PlistBuddy -c \"Delete :TVTopShelfImage\" #{plist}"
