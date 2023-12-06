@@ -17,10 +17,10 @@
 Original IPA file taken from official telegramm chat.
 
 ```bash
-shasum -a 256 ./tvos/cncrt_tvOS-24-1.12.ipa
+shasum -a 256 ./tvos/micro_tvOS-25_11.2023.ipa
 ```
 
-should produce `c530a2b3ebe0495a061d950a582bb9bf1df60d473661359c21d6bdadc4a029f1` hash.
+should produce `0f91b1830684f28125b9bc4b2296fcf48f3d6cd5ffb5746e954822ff0c96e16d` hash.
 
 ### Install dependencies (see Gemfile)
 
