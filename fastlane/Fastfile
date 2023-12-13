@@ -49,7 +49,7 @@ def update_ipa(provision, ipa_path, &block)
     block.call(plist_path)
 
     # remove plugins as not needed for base functioning.
-    sh "rm -fr ./#{unpack_name}/#{app_name}/PlugIns"
+    sh "rm -fr ./#{unpack_name}/#{app_name}/PlugIns || true"
 
     if Dir.exist?(ipa_path_update)
         File.delete(ipa_path_update)

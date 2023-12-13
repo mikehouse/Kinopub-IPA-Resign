@@ -6,15 +6,16 @@
 - MacOS
 - ruby 3+
 - bundler
-- Apple ceriticate installed in `Keychain Access` app
+- Apple Certificate installed in `Keychain Access` app
 
 ## Kinopub TVOS
 
+<img src="./tvos/ZZZZFlattenedImage-2.1_Normal@2x.png" width="60%">
 <img src="./tvos/App Icon - Small400x240@2x~tv.png" width="60%">
 
 ### About
 
-Original IPA file taken from official telegramm chat.
+Original IPA file taken from official telegram chat.
 
 ```bash
 shasum -a 256 ./tvos/micro_tvOS-25_11.2023.ipa
@@ -45,11 +46,11 @@ bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded
 
 #### Result
 
-If success can be found at ./fastlane/resign/cncrt_tvOS-24-1.12.ipa
+If success can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
 
 #### What it will do
 
-1. It takes original Kinopub tvos ipa file (./tvos/cncrt_tvOS-24-1.12.ipa)
+1. It takes original Kinopub tvos ipa file (./tvos/micro_tvOS-25_11.2023.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required

@@ -7,3 +7,4 @@ fastlane/report.xml
 fastlane/provision.plist
 fastlane/Payload
 .DS_Store
+.idea
