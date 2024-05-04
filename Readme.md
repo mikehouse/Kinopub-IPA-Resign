@@ -46,7 +46,7 @@ bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded
 
 #### Result
 
-If success can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
+If success then can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
 
 #### What it will do
 
@@ -62,6 +62,17 @@ If success can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
 1. Find paired to MacOS your Apple TV in `Apple Configurator` app (https://apps.apple.com/us/app/apple-configurator/id1037126344?mt=12)
 2. Drag and Drop there resigned IPA file
 3. Done
+
+#### If Apple Configurator app does not see your paired Apple TV
+
+- Unpack generated ipa (ipa it is just zip archive)
+- Find there `****.app/` directory
+- Open Xcode -> Window -> Devices and Simulators
+- In Devices section find your Apple TV
+- Click `Add installed app` plus button
+- Select there `****.app/` directory
+
+<img src="xcode-instapp-app.png" width="50%"  alt=""/>
 
 ### Problem to Find/Pair Apple TV to MacOS ?
 
@@ -118,7 +129,9 @@ Also there are two types of app delivering to a device:
 1. *.ipa (zip archive for *.app) file (using App Configuration/Firebase/TestFlight)
 2. install *.app directly to a device from Terminal
 
-For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there is only one way to install an app, the flow is following:
+For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there is only two way to install an app:
+
+#### First way by installing ipa using libimobiledevice tool
 
 1. Re-sign original ipa (ios/cncrt.ipa) using the project's script
 2. Unpack re-signed ipa to get an app bundle
@@ -131,5 +144,16 @@ idevice_id # 00008000-001A048C3A712345
 # install an app to a device
 ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/cncrt.app
 ```
+
+#### Second way by installing /.app using Xcode
+
+- Unpack generated ipa
+- Find there `****.app/` directory
+- Open Xcode -> Window -> Devices and Simulators
+- In Devices section find your iPhone
+- Click `Add installed app` plus button
+- Select there `****.app/` directory
+
+<img src="xcode-instapp-app.png" width="50%"  alt=""/>
 
 For a paid developer account just install the app using script created ipa file, delivering ipa to a device using App Configurator or AirDrop.
