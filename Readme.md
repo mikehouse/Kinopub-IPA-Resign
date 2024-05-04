@@ -41,7 +41,7 @@ bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded
 - If you know what identity needed you can pass it explicitly (or the script will search it through found certificates):
 
 ```bash
-bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded.mobileprovision identity:5EBCD74500DBE201A18629CDCE743303F47D0941
+bundle exec fastlane resign_ipa_tvos identity:5EBCD74500DBE201A18629CDCE743303F47D0941 provision:/Users/my_user/Downloads/embedded.mobileprovision
 ```
 
 #### Result
@@ -129,7 +129,7 @@ Also there are two types of app delivering to a device:
 1. *.ipa (zip archive for *.app) file (using App Configuration/Firebase/TestFlight)
 2. install *.app directly to a device from Terminal
 
-For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there is only two way to install an app:
+For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there are only two ways to install an app:
 
 #### First way by installing ipa using libimobiledevice tool
 
