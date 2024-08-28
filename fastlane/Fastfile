@@ -8,7 +8,7 @@ lane :resign_ipa_tvos do |options|
 end
 
 lane :resign_ipa_ios do |options|
-    ipa_path = "#{Pathname.getwd.parent}/ios/cncrt.ipa"
+    ipa_path = "#{Pathname.getwd.parent}/ios/cncrt_iOS_1.87-09.2023.ipa"
     resign_ipa_os(options[:provision], ipa_path, options[:identity]) { |plist| }
 end
 

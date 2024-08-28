@@ -110,7 +110,7 @@ I didn't want to use appdb.io service to make the same thing.
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
 ```bash
-shasum -a 256 ./ios/cncrt.ipa # 846a5d88b86ad52d1075f59f0c0b436b635cee306ce0fcb9377a11f024e52f3f  ios/cncrt.ipa
+shasum -a 256 ./ios/cncrt_iOS_1.87-09.2023.ipa # f80a7a14deb3e65f3140a68c507ff79154023187c0ad12a8f5bec5193ec82e7a
 ```
 
 ### Resign the ios App
@@ -129,7 +129,13 @@ Also there are two types of app delivering to a device:
 1. *.ipa (zip archive for *.app) file (using App Configuration/Firebase/TestFlight)
 2. install *.app directly to a device from Terminal
 
-For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. That is, if you have only free account, then after signing there are only two ways to install an app:
+For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. If you try to deliver an app via `ipa` file you will get the error like:
+
+```bash
+The bundle being installed with bundle ID com.aaa.bbb is authorized by a free provisioning profile, but apps validated by those are not allowed to be installed from this source.
+```
+
+That is, if you have only free account, then after signing there are only two ways to install an app:
 
 #### First way by installing ipa using libimobiledevice tool
 
@@ -155,5 +161,7 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 - Select there `****.app/` directory
 
 <img src="xcode-instapp-app.png" width="50%"  alt=""/>
+
+### Paid Apple Developer account
 
 For a paid developer account just install the app using script created ipa file, delivering ipa to a device using App Configurator or AirDrop.
