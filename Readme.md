@@ -110,7 +110,7 @@ I didn't want to use appdb.io service to make the same thing.
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
 ```bash
-shasum -a 256 ./ios/cncrt_iOS_1.87-09.2023.ipa # f80a7a14deb3e65f3140a68c507ff79154023187c0ad12a8f5bec5193ec82e7a
+shasum -a 256 ./ios/cncrt_iOS_1.87-02.12.2023.ipa # 9c77bc28b7bbba9a9de3744db92af1f3fbce791ef2644b5083848a713ce7d6aa
 ```
 
 ### Resign the ios App
