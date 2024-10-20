@@ -29,7 +29,7 @@ def update_ipa(provision, ipa_path, &block)
     unpack_name = "Payload"
     sh "yes | unzip -q #{ipa_path}"
     provision_content_path = "./provision.plist"
-    sh "security cms -D -i #{provision} > #{provision_content_path}"
+    sh "security cms -D -i '#{provision}' > #{provision_content_path}"
     raw_bundle_id = sh "/usr/libexec/PlistBuddy -c \"PRINT :Entitlements:application-identifier\" #{provision_content_path}"
     bundle_id = raw_bundle_id.split(".").drop(1).join(".").gsub("\n", '')
     sh "rm #{provision_content_path}"
@@ -85,7 +85,7 @@ def find_identity(provision)
     end
 
     # Decode mobileprovision.
-    xml = sh "security cms -D -i #{provision}"
+    xml = sh "security cms -D -i '#{provision}'"
     parsed_info = Nokogiri::XML(xml)
 
     identity = ""

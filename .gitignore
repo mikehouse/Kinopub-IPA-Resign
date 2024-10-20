@@ -1,10 +1,8 @@
 .bundle
 Gemfile.lock
 vendor
-fastlane/__MACOSX
-fastlane/resign
-fastlane/report.xml
-fastlane/provision.plist
-fastlane/Payload
+fastlane/
+!fastlane/Fastfile
+!fastlane/README.md
 .DS_Store
 .idea
