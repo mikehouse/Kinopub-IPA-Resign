@@ -107,6 +107,7 @@ I didn't want to use appdb.io service to make the same thing.
 
 ## Kinopub iOS App
 
+<img src="./ios/AppIcon283.5x83.5@2x~ipad.png">
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
 ```bash
