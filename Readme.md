@@ -178,4 +178,4 @@ The same way as for Kinopub tvOS, except use iOS Xcode App template and select t
 
 ‼️ **Important:**
 
-Be aware that installation via uploading .ipa file using AirDrop to the Apple device does not work anymore for the latest iOS and tvOS versions. Use the .app directory instead.
+Be aware that installation via uploading .ipa file using AirDrop and Apple Configurator to the Apple device does not work anymore for the latest iOS and tvOS versions. Use the .app directory instead.
