@@ -8,7 +8,7 @@ lane :resign_ipa_tvos do |options|
 end
 
 lane :resign_ipa_ios do |options|
-    ipa_path = "#{Pathname.getwd.parent}/ios/cncrt_iOS_1.87-02.12.2023.ipa"
+    ipa_path = "#{Pathname.getwd.parent}/ios/cinepub_2.20-02.2026.ipa"
     resign_ipa_os(options[:provision], ipa_path, options[:identity]) { |plist| }
 end
 
@@ -45,7 +45,7 @@ def update_ipa(provision, ipa_path, &block)
     # update bundle id
     sh "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{bundle_id}\" #{plist_path}"
 
-    # hand to the caller to hanlde plist if needed
+    # hand to the caller to handle plist if needed
     block.call(plist_path)
 
     # remove plugins as not needed for base functioning.
@@ -119,7 +119,7 @@ def verify_ipa_path(ipa_path)
 end
 
 def verify_path(path, error)
-    if path == nil || File.exists?(path) == false || path.start_with?("/") == false || yield(path) == false
+    if path == nil || File.exist?(path) == false || path.start_with?("/") == false || yield(path) == false
         UI.user_error!(error)
     end
     path

@@ -1,21 +1,21 @@
 
-## Kinopub service IPA resinging automation
+# Kinopub service .ipa resign automation
 
-### Requirements
+## Requirements
 
 - MacOS
-- ruby 3+
+- ruby 3.2+
 - bundler
 - Apple Certificate installed in `Keychain Access` app
 
-## Kinopub TVOS
+## Kinopub tvOS
 
 <img src="./tvos/ZZZZFlattenedImage-2.1_Normal@2x.png" width="60%">
 <img src="./tvos/App Icon - Small400x240@2x~tv.png" width="60%">
 
-### About
+## About
 
-Original IPA file taken from official telegram chat.
+Original tvOS .ipa file taken from official telegram chat.
 
 ```bash
 shasum -a 256 ./tvos/micro_tvOS-25_11.2023.ipa
@@ -23,73 +23,72 @@ shasum -a 256 ./tvos/micro_tvOS-25_11.2023.ipa
 
 should produce `0f91b1830684f28125b9bc4b2296fcf48f3d6cd5ffb5746e954822ff0c96e16d` hash.
 
-### Install dependencies (see Gemfile)
+## Install dependencies (see Gemfile)
 
 ```bash
-bundle config set --local path 'vendor/bundle'
 bundle install
 ```
 
-### Resign Kinopub TVOS ipa file
+## Resign KinoPub tvOS .ipa file
 
-- Call from repo root directory. Must use full files paths.
-
-```bash
-bundle exec fastlane resign_ipa_tvos provision:/Users/my_user/Downloads/embedded.mobileprovision
-```
-
-- If you know what identity needed you can pass it explicitly (or the script will search it through found certificates):
+- Call from the repo root directory. Must use an absolute file path.
 
 ```bash
-bundle exec fastlane resign_ipa_tvos identity:5EBCD74500DBE201A18629CDCE743303F47D0941 provision:/Users/my_user/Downloads/embedded.mobileprovision
+bundle exec fastlane resign_ipa_tvos provision:/Users/$USER/Downloads/embedded.mobileprovision
 ```
 
-#### Result
+- If you know what identity needed, you can pass it explicitly (or the script will search it through found certificates):
 
-If success then can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
+```bash
+bundle exec fastlane resign_ipa_tvos identity:5EBCD74500DBE201A18629CDCE743303F47D0941 provision:/Users/$USER/Downloads/embedded.mobileprovision
+```
 
-#### What it will do
+### Result
 
-1. It takes original Kinopub tvos ipa file (./tvos/micro_tvOS-25_11.2023.ipa)
+On success, the result can be found at ./fastlane/resign/micro_tvOS-25_11.2023.ipa
+
+### What it will do
+
+1. It takes original Kinopub tvos .ipa file (./tvos/micro_tvOS-25_11.2023.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required
 5. Repacks it back to .ipa
-6. Uses `fastlane resign` tool (https://docs.fastlane.tools/actions/resign/) to resign IPA file by provided `mobileprovision`
+6. Uses `fastlane resign` tool (https://docs.fastlane.tools/actions/resign/) to resign .ipa file by provided `mobileprovision`
 
-### Install IPA TVOS
+## Install .ipa tvOS
 
-1. Find paired to MacOS your Apple TV in `Apple Configurator` app (https://apps.apple.com/us/app/apple-configurator/id1037126344?mt=12)
-2. Drag and Drop there resigned IPA file
-3. Done
+### Xcode way
 
-#### If Apple Configurator app does not see your paired Apple TV
-
-- Unpack generated ipa (ipa it is just zip archive)
-- Find there `****.app/` directory
-- Open Xcode -> Window -> Devices and Simulators
-- In Devices section find your Apple TV
+- Unpack generated ./tvos/micro_tvOS-25_11.2023.ipa (change .ipa extension to .zip and unzip it)
+- Find there `./fastlane/resign/Payload/Kinopub.app` directory
+- Open Xcode → Window → Devices and Simulators
+- In the Devices section find your Apple TV
 - Click `Add installed app` plus button
-- Select there `****.app/` directory
+- Select there `./fastlane/resign/Payload/Kinopub.app` directory
 
 <img src="xcode-instapp-app.png" width="50%"  alt=""/>
 
-### Problem to Find/Pair Apple TV to MacOS ?
+### ideviceinstaller
 
-Here is my gist with full description how to pair Apple TV using Xcode https://gist.github.com/mikehouse/01ffe9ce1a5793406150f7b2fd15abbc
+Install an app bundle directly to a device using `ideviceinstaller` from `libimobiledevice`
 
-### Why ?
+```bash
+# find connected Apple TV 
+idevice_id # 00008000-001A048C3A712345
 
-I didn't want to use appdb.io service to make the same thing.
+# install an app to a device
+ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/Kinopub.app
+```
 
-### How to create .mobileprovision using Xcode
+## How to create .mobileprovision using Xcode
 
 1. Open Xcode
-2. LogIn in Xcode using your Apple ID (Preferences -> Accounts)
-3. Create new project
+2. LogIn in Xcode using your Apple ID (Preferences → Accounts)
+3. Create a new project
 
-- File -> New -> Project
-- Select there tvos tab
+- File → New → Project
+- Select there tvOS tab
 - Select App
 
 <img src="tvos-create-app.png" width="80%">
@@ -97,72 +96,86 @@ I didn't want to use appdb.io service to make the same thing.
 - Type your app bundle id
 - Select your developer team
 
-4. Device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file
+4. Be sure the device destination is set as your real paired Apple TV that Xcode is able to add its UUID to .mobileprovision file as you can use .mobileprovision with unknown device UUID. 
 
 <img src="tvos-configure-app.png" width="80%">
 
-5. Build project (Product -> Build)
-6. Go to the build project directory (Product -> Show Build Folder in Finder)
+5. Build project (Product → Build)
+6. Go to the build project directory (Product → Show Build Folder in Finder)
 7. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
 
-## Kinopub iOS App
+## KinoPub iOS App
 
+<img src="./ios/AppIcon76x76@2x~ipad.png">
 <img src="./ios/AppIcon283.5x83.5@2x~ipad.png">
 <img src="./ios/AppIcon90x90@2x~iphone.png">
 
 ```bash
-shasum -a 256 ./ios/cncrt_iOS_1.87-02.12.2023.ipa # 9c77bc28b7bbba9a9de3744db92af1f3fbce791ef2644b5083848a713ce7d6aa
+shasum -a 256 ./ios/cinepub_2.20-02.2026.ipa # b96cb3cd4901ff3081dc1db37432ee31ddb03d50b793ea95c9c5766fa12dae31
 ```
 
-### Resign the ios App
+## Resign the iOS App
 
 ```bash
-bundle exec fastlane resign_ipa_ios provision:/Users/my_user/Downloads/embedded.mobileprovision
+bundle exec fastlane resign_ipa_ios provision:/Users/$USER/Downloads/embedded.mobileprovision
 ```
 
-There are two types of accounts for signing:
-
-1. Developer account (paid 100$ per year, a sign is valid for a year)
-2. Free account (a sign is valid for 7 days)
-
-Also there are two types of app delivering to a device:
-
-1. *.ipa (zip archive for *.app) file (using App Configuration/Firebase/TestFlight)
-2. install *.app directly to a device from Terminal
-
-For free account the only direct install of *.app available. Apple did it this way because you are allowed to install an app with free account only during development from Xcode. If you try to deliver an app via `ipa` file you will get the error like:
+- With identity
 
 ```bash
-The bundle being installed with bundle ID com.aaa.bbb is authorized by a free provisioning profile, but apps validated by those are not allowed to be installed from this source.
+bundle exec fastlane resign_ipa_ios identity:5EBCD74500DBE201A18629CDCE743303F47D0941 provision:/Users/$USER/Downloads/embedded.mobileprovision
 ```
 
-That is, if you have only free account, then after signing there are only two ways to install an app:
+### Result
 
-#### First way by installing ipa using libimobiledevice tool
+On success, the result can be found at ./fastlane/resign/cinepub_2.20-02.2026.zip
 
-1. Re-sign original ipa (ios/cncrt.ipa) using the project's script
-2. Unpack re-signed ipa to get an app bundle
-3. Install an app bundle directly to a device using set of libs from `libimobiledevice`
+### What it will do
+
+1. It takes original Kinopub iOS .ipa file (./ios/cinepub_2.20-02.2026.ipa)
+2. Unpacks it
+3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
+4. Removes from Kinopub's application `Plugins` directory as not required
+5. Repacks it back to .ipa
+6. Uses `fastlane resign` tool (https://docs.fastlane.tools/actions/resign/) to resign .ipa file by provided `mobileprovision`
+
+## Install .ipa iOS
+
+### Xcode way
+
+- Unpack generated ./ios/cinepub_2.20-02.2026.ipa (change .ipa extension to .zip and unzip it)
+- Find there `./fastlane/resign/Payload/Cinepub.app` directory
+- Open Xcode → Window → Devices and Simulators
+- In the Devices section find your Apple TV
+- Click `Add installed app` plus button
+- Select there `./fastlane/resign/Payload/Cinepub.app` directory
+
+<img src="xcode-instapp-app.png" width="50%"  alt=""/>
+
+### ideviceinstaller
+
+Install an app bundle directly to a device using `ideviceinstaller` from `libimobiledevice`
 
 ```bash
 # find connected iPhone 
 idevice_id # 00008000-001A048C3A712345
 
 # install an app to a device
-ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/cncrt.app
+ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/Cinepub.app
 ```
 
-#### Second way by installing /.app using Xcode
+### Untrusted Developer Warning
 
-- Unpack generated ipa
-- Find there `****.app/` directory
-- Open Xcode -> Window -> Devices and Simulators
-- In Devices section find your iPhone
-- Click `Add installed app` plus button
-- Select there `****.app/` directory
+<img src="ios-untrusted-warning.jpg" width="20%" alt=""/>
 
-<img src="xcode-instapp-app.png" width="50%"  alt=""/>
+To fix this, go to Settings → General → VPN & Device Management → Developer App and click on the 'Trust $ {email}' button.
 
-### Paid Apple Developer account
+## How to create .mobileprovision using Xcode
 
-For a paid developer account just install the app using script created ipa file, delivering ipa to a device using App Configurator or AirDrop.
+The same way as for Kinopub tvOS, except use iOS Xcode App template and select there your real iOS device
+
+----
+
+‼️ **Important:**
+
+Be aware that installation via uploading .ipa file using AirDrop to the Apple device does not work anymore for the latest iOS and tvOS versions. Use the .app directory instead.
