@@ -60,7 +60,7 @@ On success, the result can be found at ./fastlane/resign/micro_tvOS-25_11.2023.i
 
 ### Xcode way
 
-- Unpack generated ./tvos/micro_tvOS-25_11.2023.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/micro_tvOS-25_11.2023.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Kinopub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
@@ -143,7 +143,7 @@ On success, the result can be found at ./fastlane/resign/Cinepub_2.24-22022026.z
 
 ### Xcode way
 
-- Unpack generated ./ios/Cinepub_2.24-22022026.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/Cinepub_2.24-22022026.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Cinepub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
