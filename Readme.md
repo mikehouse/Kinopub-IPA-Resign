@@ -11,7 +11,6 @@
 ## Kinopub tvOS
 
 <img src="./tvos/ZZZZFlattenedImage-2.1_Normal@2x.png" width="60%">
-<img src="./tvos/App Icon - Small400x240@2x~tv.png" width="60%">
 
 ## About
 
@@ -107,11 +106,9 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 ## KinoPub iOS App
 
 <img src="./ios/AppIcon76x76@2x~ipad.png">
-<img src="./ios/AppIcon283.5x83.5@2x~ipad.png">
-<img src="./ios/AppIcon90x90@2x~iphone.png">
 
 ```bash
-shasum -a 256 ./ios/Cinepub_2.26-27022026.ipa # 79bb1354e1f8039f6a747b1517b9f2828f5979a182d8a73c2a10f7f78ee51605
+shasum -a 256 ./ios/Cinepub_2.27-03032026.ipa # 80e50c7fa07ce067fdfb13ea47d34864edc5d289a140cd5fdf2bb3f066d7e36f
 ```
 
 ## Resign the iOS App
@@ -128,11 +125,11 @@ bundle exec fastlane resign_ipa_ios identity:5EBCD74500DBE201A18629CDCE743303F47
 
 ### Result
 
-On success, the result can be found at ./fastlane/resign/Cinepub_2.26-27022026.zip
+On success, the result can be found at ./fastlane/resign/Cinepub_2.27-03032026.zip
 
 ### What it will do
 
-1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.26-27022026.ipa)
+1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.27-03032026.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required
@@ -143,7 +140,7 @@ On success, the result can be found at ./fastlane/resign/Cinepub_2.26-27022026.z
 
 ### Xcode way
 
-- Unpack generated ./fastlane/resign/Cinepub_2.26-27022026.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/Cinepub_2.27-03032026.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Cinepub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
