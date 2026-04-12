@@ -108,7 +108,7 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 <img src="./ios/AppIcon76x76@2x~ipad.png">
 
 ```bash
-shasum -a 256 ./ios/Cinepub_2.28-04032026.ipa # c29549e2c5d1fe400d2d165ee557cd84ea68294cdb16417f8788ab4a0e63d6ae
+shasum -a 256 ./ios/Cinepub_2.31-25032026.ipa # ad0b66da51596f0745881d024482af32e0924564c01c35973d26242b77bfa811
 ```
 
 ## Resign the iOS App
@@ -125,22 +125,22 @@ bundle exec fastlane resign_ipa_ios identity:5EBCD74500DBE201A18629CDCE743303F47
 
 ### Result
 
-On success, the result can be found at ./fastlane/resign/Cinepub_2.28-04032026.zip
+On success, the result can be found at ./fastlane/resign/Cinepub_2.31-25032026.zip
 
 ### What it will do
 
-1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.28-04032026.ipa)
+1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.31-25032026.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required
 5. Repacks it back to .ipa
 6. Uses `fastlane resign` tool (https://docs.fastlane.tools/actions/resign/) to resign .ipa file by provided `mobileprovision`
 
-## Install .ipa iOS
+## Install .ipa iOS / iPadOS
 
 ### Xcode way
 
-- Unpack generated ./fastlane/resign/Cinepub_2.28-04032026.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/Cinepub_2.31-25032026.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Cinepub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
