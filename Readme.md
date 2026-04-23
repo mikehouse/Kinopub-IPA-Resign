@@ -57,7 +57,7 @@ On success, the result can be found at ./fastlane/resign/micro_tvOS-25_11.2023.i
 
 ## Install .ipa tvOS
 
-### Xcode way
+### Xcode way (simple Developer signature)
 
 - Unpack generated ./fastlane/resign/micro_tvOS-25_11.2023.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Kinopub.app` directory
@@ -68,7 +68,7 @@ On success, the result can be found at ./fastlane/resign/micro_tvOS-25_11.2023.i
 
 <img src="xcode-instapp-app.png" width="50%"  alt=""/>
 
-### ideviceinstaller
+### ideviceinstaller (simple Developer signature)
 
 Install an app bundle directly to a device using `ideviceinstaller` from `libimobiledevice`
 
@@ -79,6 +79,10 @@ idevice_id # 00008000-001A048C3A712345
 # install an app to a device
 ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_app_resign/fastlane/resign/Payload/Kinopub.app
 ```
+
+### Ad-Hoc Distribution Signature
+
+- For this kind of distribution, you can install the app using .ipa file, send it to the device via AirDrop
 
 ## How to create .mobileprovision using Xcode
 
@@ -103,12 +107,12 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 6. Go to the build project directory (Product → Show Build Folder in Finder)
 7. Find there in Products/Debug-appletvos/your-app-name.app/embedded.mobileprovision file
 
-## KinoPub iOS App
+## KinoPub iOS and iPad App
 
 <img src="./ios/AppIcon76x76@2x~ipad.png">
 
 ```bash
-shasum -a 256 ./ios/Cinepub_2.31-25032026.ipa # ad0b66da51596f0745881d024482af32e0924564c01c35973d26242b77bfa811
+shasum -a 256 ./ios/Cinepub_2.32-20042026.ipa # 7050c7f09020b54c8c05a8a0a35ae6ae40697053ece55d8c17542398bce8ce2a
 ```
 
 ## Resign the iOS App
@@ -125,11 +129,11 @@ bundle exec fastlane resign_ipa_ios identity:5EBCD74500DBE201A18629CDCE743303F47
 
 ### Result
 
-On success, the result can be found at ./fastlane/resign/Cinepub_2.31-25032026.zip
+On success, the result can be found at ./fastlane/resign/Cinepub_2.32-20042026.zip
 
 ### What it will do
 
-1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.31-25032026.ipa)
+1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.32-20042026.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required
@@ -138,9 +142,9 @@ On success, the result can be found at ./fastlane/resign/Cinepub_2.31-25032026.z
 
 ## Install .ipa iOS / iPadOS
 
-### Xcode way
+### Xcode way (simple Developer signature)
 
-- Unpack generated ./fastlane/resign/Cinepub_2.31-25032026.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/Cinepub_2.32-20042026.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Cinepub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
@@ -149,9 +153,13 @@ On success, the result can be found at ./fastlane/resign/Cinepub_2.31-25032026.z
 
 <img src="xcode-instapp-app.png" width="50%"  alt=""/>
 
-### ideviceinstaller
+### ideviceinstaller (simple Developer signature)
 
 Install an app bundle directly to a device using `ideviceinstaller` from `libimobiledevice`
+
+### Ad-Hoc Distribution Signed
+
+- For this kind of distribution, you can install the app using .ipa file, send it to the device via AirDrop
 
 ```bash
 # find connected iPhone 
@@ -172,7 +180,3 @@ To fix this, go to Settings → General → VPN & Device Management → Develope
 The same way as for Kinopub tvOS, except use iOS Xcode App template and select there your real iOS device
 
 ----
-
-‼️ **Important:**
-
-Be aware that installation via uploading .ipa file using AirDrop and Apple Configurator to the Apple device does not work anymore for the latest iOS and tvOS versions. Use the .app directory instead.
