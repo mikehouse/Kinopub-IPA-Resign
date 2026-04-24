@@ -84,7 +84,7 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 
 - For this kind of distribution, you can install the app using .ipa file, send it to the device via AirDrop
 
-## How to create .mobileprovision using Xcode
+## How to create .mobileprovision using Xcode (Free Developer Program)
 
 1. Open Xcode
 2. LogIn in Xcode using your Apple ID (Preferences → Accounts)
@@ -112,7 +112,7 @@ ideviceinstaller --udid 00008000-001A048C3A712345 --install ~/Downloads/kinopub_
 <img src="./ios/AppIcon76x76@2x~ipad.png">
 
 ```bash
-shasum -a 256 ./ios/Cinepub_2.32-20042026.ipa # 7050c7f09020b54c8c05a8a0a35ae6ae40697053ece55d8c17542398bce8ce2a
+shasum -a 256 ./ios/Cinepub_2.33-23042026.ipa # 073308d32d7fc26ba6eab83f0db19014eca0c4615d42213f3a0d6303adba9564
 ```
 
 ## Resign the iOS App
@@ -129,11 +129,11 @@ bundle exec fastlane resign_ipa_ios identity:5EBCD74500DBE201A18629CDCE743303F47
 
 ### Result
 
-On success, the result can be found at ./fastlane/resign/Cinepub_2.32-20042026.zip
+On success, the result can be found at ./fastlane/resign/Cinepub_2.33-23042026.zip
 
 ### What it will do
 
-1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.32-20042026.ipa)
+1. It takes the original Kinopub iOS.ipa file (./ios/Cinepub_2.33-23042026.ipa)
 2. Unpacks it
 3. Takes bundle id from your provided `mobileprovision` file and replaces Kinopub's one
 4. Removes from Kinopub's application `Plugins` directory as not required
@@ -144,7 +144,7 @@ On success, the result can be found at ./fastlane/resign/Cinepub_2.32-20042026.z
 
 ### Xcode way (simple Developer signature)
 
-- Unpack generated ./fastlane/resign/Cinepub_2.32-20042026.ipa (change .ipa extension to .zip and unzip it)
+- Unpack generated ./fastlane/resign/Cinepub_2.33-23042026.ipa (change .ipa extension to .zip and unzip it)
 - Find there `./fastlane/resign/Payload/Cinepub.app` directory
 - Open Xcode → Window → Devices and Simulators
 - In the Devices section find your Apple TV
