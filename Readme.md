@@ -180,3 +180,24 @@ To fix this, go to Settings → General → VPN & Device Management → Develope
 The same way as for Kinopub tvOS, except use iOS Xcode App template and select there your real iOS device
 
 ----
+## Run the KinoPub iOS app natively on Apple Silicon Mac
+
+No Apple ID, provisioning profile or PlayCover needed. Tested on macOS 15.7 (M3 Max) with `Cinepub_2.35`.
+
+Requirements: Apple Silicon Mac, Xcode (for the macOS SDK with iOS support).
+
+```bash
+./macos/build.sh   # builds ~/Applications/Cinepub.app from the newest ./ios/Cinepub_*.ipa
+open ~/Applications/Cinepub.app
+```
+
+Optional arguments: `./macos/build.sh path/to/app.ipa path/to/Output.app`.
+
+### What it does
+
+1. Unpacks the iOS .ipa and removes the widget extension.
+2. Retags the arm64 binaries as Mac Catalyst (`vtool`), so the app runs with an ad-hoc signature and SIP enabled.
+3. Injects `CinepubFix.dylib` (sources in `./macos`) that works around issues of the iOS build on a Mac:
+   - the device activation sheet crashes with `No Observable object of type ProxyManager found`: on a Mac SwiftUI presents it from a graph without the app's environment objects, so `@Environment(X.self)` lookups fall back to the instance the app injected;
+   - auth tokens are not saved, because an ad-hoc signed app has no keychain entitlements: generic-password items are kept in `~/Library/Application Support/CinepubFix/keychain.plist` (mode 0600, plain text);
+   - the layout is sized from `UIScreen.bounds` (the whole display): the app's own calls get the window size, and the title bar is hidden so the top safe area matches the iPad status bar.
