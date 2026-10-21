@@ -17,7 +17,7 @@ xcrun clang -c -target $TARGET -isysroot "$SDK" "$HERE/tramp.s" -o "$WORK/tramp.
 xcrun clang -c -fobjc-arc -target $TARGET -isysroot "$SDK" -iframework "$IOS_FW" "$HERE/interpose.m" -o "$WORK/interpose.o"
 xcrun swiftc -emit-library -parse-as-library -O -module-name CinepubFix -target $TARGET -sdk "$SDK" \
     -Fsystem "$IOS_FW" -I "$SDK/System/iOSSupport/usr/lib/swift" -L "$SDK/System/iOSSupport/usr/lib/swift" \
-    "$HERE/EnvFallback.swift" "$WORK/tramp.o" "$WORK/interpose.o" -framework Security -framework UIKit -o "$WORK/CinepubFix.dylib"
+    "$HERE"/*.swift "$WORK/tramp.o" "$WORK/interpose.o" -framework Security -framework UIKit -o "$WORK/CinepubFix.dylib"
 
 unzip -q "$IPA" -d "$WORK"
 APP=$(ls -d "$WORK"/Payload/*.app)

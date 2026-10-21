@@ -129,6 +129,43 @@ static CGRect fix_screenBounds(UIScreen *self, SEL _cmd) {
     return origScreenBounds(self, _cmd);
 }
 
+// Escape goes back like the "<" button: pop the deepest visible navigation stack.
+// UIApplication is last in the responder chain, so text fields and the player still get Escape first.
+static UINavigationController *visibleNavigation(UIViewController *vc) {
+    UIViewController *presented = vc.presentedViewController;
+    if (presented && !presented.isBeingDismissed) {
+        UINavigationController *nav = visibleNavigation(presented);
+        if (nav) return nav;
+    }
+    for (UIViewController *child in vc.childViewControllers.reverseObjectEnumerator) {
+        if (!child.viewIfLoaded.window || child.view.hidden) continue;
+        UINavigationController *nav = visibleNavigation(child);
+        if (nav) return nav;
+    }
+    if ([vc isKindOfClass:UINavigationController.class] && ((UINavigationController *)vc).viewControllers.count > 1)
+        return (UINavigationController *)vc;
+    return nil;
+}
+
+static void goBack(UIApplication *self, SEL _cmd, id sender) {
+    for (UIScene *scene in self.connectedScenes) {
+        if (![scene isKindOfClass:UIWindowScene.class]) continue;
+        for (UIWindow *window in ((UIWindowScene *)scene).windows) {
+            if (!window.isKeyWindow) continue;
+            [visibleNavigation(window.rootViewController) popViewControllerAnimated:YES];
+            return;
+        }
+    }
+}
+
+static NSArray *(*origKeyCommands)(id, SEL);
+
+static NSArray *fix_keyCommands(UIApplication *self, SEL _cmd) {
+    UIKeyCommand *escape = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(cinepubGoBack:)];
+    escape.wantsPriorityOverSystemBehavior = YES;
+    return [origKeyCommands(self, _cmd) ?: @[] arrayByAddingObject:escape];
+}
+
 __attribute__((constructor)) static void init(void) {
     lock = [NSLock new];
     unsigned long size = 0;
@@ -137,18 +174,39 @@ __attribute__((constructor)) static void init(void) {
     Method bounds = class_getInstanceMethod(UIScreen.class, @selector(bounds));
     origScreenBounds = (CGRect (*)(id, SEL))method_setImplementation(bounds, (IMP)fix_screenBounds);
 
-    // Content under a hidden title bar gets a top safe-area inset, like the iPad status bar the layout expects.
+    // Override keyCommands on UIApplication only, not on every UIResponder.
+    origKeyCommands = (NSArray *(*)(id, SEL))class_getMethodImplementation(UIApplication.class, @selector(keyCommands));
+    class_addMethod(UIApplication.class, @selector(cinepubGoBack:), (IMP)goBack, "v@:@");
+    if (!class_addMethod(UIApplication.class, @selector(keyCommands), (IMP)fix_keyCommands, "@@:")) {
+        origKeyCommands = (NSArray *(*)(id, SEL))method_setImplementation(
+            class_getInstanceMethod(UIApplication.class, @selector(keyCommands)), (IMP)fix_keyCommands);
+    }
+
     [NSNotificationCenter.defaultCenter addObserverForName:UISceneWillConnectNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         if (![note.object isKindOfClass:UIWindowScene.class]) return;
+        // Content under a hidden title bar gets a top safe-area inset, like the iPad status bar the layout expects.
         UITitlebar *titlebar = ((UIWindowScene *)note.object).titlebar;
         titlebar.titleVisibility = UITitlebarTitleVisibilityHidden;
         titlebar.toolbar = nil;
     }];
 }
 
-// SwiftUI replacements live in EnvFallback.swift and tramp.s.
+// SwiftUI replacements live in EnvFallback.swift, TextScale.swift and tramp.s.
 extern void cinepub_view_env(void);
 extern void cinepub_env_init(void);
+extern void cinepub_font_system(void);
+extern void cinepub_font_system_optional(void);
+extern void orig_font_system(void) __asm__("_$s7SwiftUI4FontV6system4size6weight6designAC12CoreGraphics7CGFloatV_AC6WeightVAC6DesignOtFZ");
+extern void orig_font_system_optional(void) __asm__("_$s7SwiftUI4FontV6system4size6weight6designAC12CoreGraphics7CGFloatV_AC6WeightVSgAC6DesignOSgtFZ");
+
+// Font.<style> getters: $s7SwiftUI4FontV<len><name>ACvgZ
+#define TEXT_STYLES(X) X(largeTitle, "10largeTitle") X(title, "5title") X(title2, "6title2") X(title3, "6title3") \
+    X(headline, "8headline") X(body, "4body") X(callout, "7callout") X(subheadline, "11subheadline") \
+    X(footnote, "8footnote") X(caption, "7caption") X(caption2, "8caption2")
+#define DECLARE_STYLE(name, mangled) extern void cinepub_font_##name(void); \
+    extern void orig_font_##name(void) __asm__("_$s7SwiftUI4FontV" mangled "ACvgZ");
+#define INTERPOSE_STYLE(name, mangled) { (const void *)cinepub_font_##name, (const void *)orig_font_##name },
+TEXT_STYLES(DECLARE_STYLE)
 extern void orig_view_env(void) __asm__("_$s7SwiftUI4ViewPAAE11environmentyQrqd__SgRld__C11Observation10ObservableRd__lF");
 extern void orig_env_init(void) __asm__("_$s7SwiftUI11EnvironmentVyACyxGxmcRlzC11Observation10ObservableRzlufC");
 
@@ -159,4 +217,7 @@ __attribute__((used, section("__DATA,__interpose"))) static const void *interpos
     { (const void *)fix_SecItemDelete, (const void *)SecItemDelete },
     { (const void *)cinepub_view_env, (const void *)orig_view_env },
     { (const void *)cinepub_env_init, (const void *)orig_env_init },
+    { (const void *)cinepub_font_system, (const void *)orig_font_system },
+    { (const void *)cinepub_font_system_optional, (const void *)orig_font_system_optional },
+    TEXT_STYLES(INTERPOSE_STYLE)
 };

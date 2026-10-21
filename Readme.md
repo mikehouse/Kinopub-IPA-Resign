@@ -203,3 +203,6 @@ Optional arguments: `./macos/build.sh path/to/app.ipa path/to/Output.app`.
    - the device activation sheet crashes with `No Observable object of type ProxyManager found`: on a Mac SwiftUI presents it from a graph without the app's environment objects, so `@Environment(X.self)` lookups fall back to the instance the app injected;
    - auth tokens are not saved, because an ad-hoc signed app has no keychain entitlements: generic-password items are kept in `~/Library/Application Support/CinepubFix/keychain.plist` (mode 0600, plain text);
    - the layout is sized from `UIScreen.bounds` (the whole display): the app's own calls get the window size, and the title bar is hidden so the top safe area matches the iPad status bar.
+   - text is small because iPad apps are drawn at 77% on a Mac: all fonts are scaled by 1.3
+     (tune with `defaults write com.petrovich.cinepub CinepubTextScale -float 1.4`, then restart the app);
+   - Escape goes back, like the `<` button.
