@@ -184,6 +184,8 @@ The same way as for Kinopub tvOS, except use iOS Xcode App template and select t
 
 No Apple ID, provisioning profile or PlayCover needed. Tested on macOS 15.7 (M3 Max) with `Cinepub_2.35`.
 
+<img src="./macos/screenshot.jpg" width="80%" alt=""/>
+
 Requirements: Apple Silicon Mac, Xcode (for the macOS SDK with iOS support).
 
 ```bash
