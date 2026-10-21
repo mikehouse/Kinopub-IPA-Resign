@@ -8,9 +8,14 @@ private let textScale: CGFloat = {
     return value > 0 ? value : 1.3
 }()
 
+// 2 for fonts made by the enlarged seasons/episodes code (see interpose.m), else 1.
+@_silgen_name("cinepub_font_zoom") private func fontZoom() -> Double
+
+private func scaled(_ size: CGFloat) -> CGFloat { size * textScale * fontZoom() }
+
 // Text styles don't follow Dynamic Type on a Mac, so each one becomes its iOS (Large) size, scaled.
 private func style(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-    .system(size: size * textScale, weight: weight)
+    .system(size: scaled(size), weight: weight)
 }
 
 @_silgen_name("cinepub_font_largeTitle") public func cinepubLargeTitle() -> Font { style(34) }
@@ -28,10 +33,10 @@ private func style(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
 // Same signatures (and so the same ABI) as both SwiftUI.Font.system(size:weight:design:) overloads.
 @_silgen_name("cinepub_font_system")
 public func cinepubFontSystem(size: CGFloat, weight: Font.Weight, design: Font.Design) -> Font {
-    .system(size: size * textScale, weight: weight, design: design)
+    .system(size: scaled(size), weight: weight, design: design)
 }
 
 @_silgen_name("cinepub_font_system_optional")
 public func cinepubFontSystemOptional(size: CGFloat, weight: Font.Weight?, design: Font.Design?) -> Font {
-    .system(size: size * textScale, weight: weight, design: design)
+    .system(size: scaled(size), weight: weight, design: design)
 }

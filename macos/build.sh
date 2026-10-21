@@ -5,7 +5,7 @@ set -eu
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 IPA=${1:-$(ls "$HERE"/../ios/Cinepub_*.ipa | tail -1)}
-OUT=${2:-$HOME/Applications/Cinepub.app}
+OUT=${2:-/Applications/Cinepub.app}
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 

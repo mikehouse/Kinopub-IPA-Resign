@@ -189,8 +189,8 @@ No Apple ID, provisioning profile or PlayCover needed. Tested on macOS 15.7 (M3 
 Requirements: Apple Silicon Mac, Xcode (for the macOS SDK with iOS support).
 
 ```bash
-./macos/build.sh   # builds ~/Applications/Cinepub.app from the newest ./ios/Cinepub_*.ipa
-open ~/Applications/Cinepub.app
+./macos/build.sh   # builds /Applications/Cinepub.app from the newest ./ios/Cinepub_*.ipa
+open /Applications/Cinepub.app
 ```
 
 Optional arguments: `./macos/build.sh path/to/app.ipa path/to/Output.app`.
@@ -206,3 +206,6 @@ Optional arguments: `./macos/build.sh path/to/app.ipa path/to/Output.app`.
    - text is small because iPad apps are drawn at 77% on a Mac: all fonts are scaled by 1.3
      (tune with `defaults write com.petrovich.cinepub CinepubTextScale -float 1.4`, then restart the app);
    - Escape goes back, like the `<` button.
+   - a right click works as the iPad long press;
+   - on the item page of Cinepub 2.35 the seasons (×1.5), episode cards (×2) and the trailer banner (×4.5 height)
+     are enlarged to suit a Mac window. These code locations are pinned to that build and skipped for any other.
